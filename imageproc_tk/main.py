@@ -10,15 +10,11 @@ GH = os.path.join(dir, "../test/data/GH.jpg")
 
 class ImageArray(object):
 
-    def __init__(self, img_path, channels=3, keras_dim_ordering="th"):
+    def __init__(self, img_path, channels=3):
         self.path = img_path
         self.channels = channels
         self.img2arr()
-        self.keras_dim_ordering = keras_dim_ordering
-        # 'th'=Theano, 'tf'=TensorFlow where:
-        #       'th': (samples, channels, width, height)
-        #       'tf': (samples, width, height, channels)
-        #self.reshape_keras_dim_ordering()  # DO THIS AT THE END OF ALL PREPROCESSING
+        #self.reshape_keras_dim_ordering()  # DO THIS AT THE END OF ALL PREPROCESSING (helps avoid many if 'th'/'tf' statements)
 
     def __repr__(self):
         return "self.arr=\n\n{}".format(self.arr)
@@ -30,17 +26,17 @@ class ImageArray(object):
         elif self.channels == 1: # grayscale
             self.arr = cv2.imread(self.path, 0)
 
-    def reshape_keras_dim_ordering(self):
+    def reshape_keras_dim_ordering(self, order):
         """ Return a given numpy (image) array with Keras dimension ordering.
             default order (cv2)=(height, width, channels)
             order={'th'=Theano, 'tf'=TensorFlow} where:
                 'th': (channels, width, height)
                 'tf': (width, height, channels)
         """
-        if self.keras_dim_ordering == "th":
+        if order == "th":
             self.arr = self.arr.transpose((2,1,0))
             assert(self.arr.shape[0]==1 or self.arr.shape[0]==3)
-        elif self.keras_dim_ordering == "tf":
+        elif order == "tf":
             self.arr = self.arr.transpose((1,0,2))
             assert(self.arr.shape[2]==1 or self.arr.shape[2]==3)
         else:
