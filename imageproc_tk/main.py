@@ -4,6 +4,12 @@ import numpy as np
 import cv2
 import os
 from random import randint
+import logging
+#LOG_FILENAME = 'logging_example.out'
+#logging.basicConfig(filename=LOG_FILENAME,
+logging.basicConfig(level=logging.INFO,
+                    )
+
 dir = os.path.dirname(__file__)
 GH = os.path.join(dir, "../test/data/GH.jpg")
 
@@ -72,7 +78,7 @@ class ImageArray(object):
         """
         if percent_width or percent_height:##height, width, channels
             if percent_width:
-                print "Cropping width by percent_width={}".format(percent_width)
+                logging.debug("Cropping width by percent_width={}".format(percent_width))
                 assert(percent_width >=0 and percent_width <= 1)
                 width_reduction = (percent * self.width()) // 2
                 start_left = width_reduction
@@ -80,7 +86,7 @@ class ImageArray(object):
                 self.arr = self.arr[:, start_left:end_right, :]
 
             if percent_height:
-                print "Cropping width by percent_height={}".format(percent_height)
+                logging.debug("Cropping width by percent_height={}".format(percent_height))
                 assert(percent_height >=0 and percent_height <= 1)
                 height_reduction = (percent * self.width()) // 2
                 start_top = height_reduction
@@ -91,14 +97,14 @@ class ImageArray(object):
             if pixels_width:
                 start_left = pixels_width[0]
                 end_right = pixels_width[1]
-                print "Cropping width to pixels=[:, {0}:{1}, :]".format(start_left, end_right)
+                logging.debug("Cropping width to pixels=[:, {0}:{1}, :]".format(start_left, end_right))
                 assert(start_left >= 0 and end_right <= self.width)
                 self.arr = self.arr[:, start_left:end_right, :]
 
             if pixels_height:
                 start_top = pixels_height[0]
                 end_bottom = pixels_height[1]
-                print "Cropping height to pixels=[{0}:{1}, :, :]".format(start_top, end_bottom)
+                logging.debug("Cropping height to pixels=[{0}:{1}, :, :]".format(start_top, end_bottom))
                 assert(start_top >= 0 and end_bottom <= self.height)
                 self.arr = self.arr[start_top:end_bottom, :, :]
         else:
