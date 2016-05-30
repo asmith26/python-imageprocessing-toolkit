@@ -16,10 +16,15 @@ GH = os.path.join(dir, "../test/data/GH.jpg")
 
 class ImageArray(object):
 
-    def __init__(self, img_path, channels=3):
-        self.path = img_path
+    def __init__(self, img_path=None, arr=None, channels=3):
         self.channels = channels
-        self.img2arr()
+        if img_path != None:
+            self.path = img_path
+            self.img2arr()
+        elif arr != None:
+            self.arr = arr
+        else:
+            raise InputError("Please initialise class with either argument 'img_path' or 'arr'.")
         #self.reshape_keras_dim_ordering()  # DO THIS AT THE END OF ALL PREPROCESSING (helps avoid many if 'th'/'tf' statements)
 
     def __repr__(self):
