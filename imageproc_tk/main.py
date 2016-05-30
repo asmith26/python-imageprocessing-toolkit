@@ -25,7 +25,7 @@ class ImageArray(object):
             self.arr = arr
         else:
             raise InputError("Please initialise class with either argument 'img_path' or 'arr'.")
-        #self.reshape_keras_dim_ordering()  # DO THIS AT THE END OF ALL PREPROCESSING (helps avoid many if 'th'/'tf' statements)
+
 
     def __repr__(self):
         return "self.arr=\n\n{}".format(self.arr)
@@ -37,26 +37,52 @@ class ImageArray(object):
         elif self.channels == 1: # grayscale
             self.arr = cv2.imread(self.path, 0)
 
-    def reshape_keras_dim_ordering(self, order):
+    def order_ocv2ker(self, keras_order):
         """ Return a given numpy (image) array with Keras dimension ordering.
             default order (cv2)=(height, width, channels)
             order={'th'=Theano, 'tf'=TensorFlow} where:
                 'th': (channels, width, height)
                 'tf': (width, height, channels)
         """
-        if order == "th":
+        if keras_order == "th":
             self.arr = self.arr.transpose((2,1,0))
             assert(self.arr.shape[0]==1 or self.arr.shape[0]==3)
-        elif order == "tf":
+        elif keras_order == "tf":
             self.arr = self.arr.transpose((1,0,2))
             assert(self.arr.shape[2]==1 or self.arr.shape[2]==3)
         else:
             raise ValueError("keras_dim_ordering='th' or 'tf'.")
 
+    def order_ker2ocv(self, keras_order):
+        """ Return a given numpy (image) array with OpenCV dimension ordering
+            =(height, width, channels)
+        """
+        if keras_order == "th":
+            self.arr = self.arr.transpose((2,1,0))
+        elif keras_order == "tf":
+            self.arr = self.arr.transpose((1,0,2))
+        else:
+            raise ValueError("keras_order='th' or 'tf'.")
+        assert(self.arr.shape[2]==1 or self.arr.shape[2]==3)
+    
+
     def arr2img(self,  name='image'):
         cv2.imshow(name, self.arr)
-        cv2.waitKey(5000)
+        raw_input("Press Enter to continue...")
+        cv2.waitKey(1)
+        raw_input("Press Enter to continue...")
+        cv2.waitKey(1)
+        raw_input("Press Enter to continue...")
+        cv2.waitKey(1) # shows image
+        raw_input("Press Enter to continue...")
         cv2.destroyAllWindows()
+        raw_input("Press Enter to continue...")
+        cv2.waitKey(1)
+        raw_input("Press Enter to continue...")
+        cv2.waitKey(1)
+        raw_input("Press Enter to close...")
+        cv2.waitKey(1) # destoy image
+
 
     def height(self):
         return self.arr.shape[0]
