@@ -64,6 +64,9 @@ class ImageArray(object):
         plt.imshow(self.arr, interpolation='nearest')
         plt.show()
 
+    def save_img(self, filepath='/tmp/ImageArray.jpg'):
+        imsave(filepath, self.arr)
+
     def height(self):
         return self.arr.shape[0]
 
