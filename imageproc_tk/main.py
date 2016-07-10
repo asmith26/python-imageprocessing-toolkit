@@ -8,6 +8,7 @@ import numpy as np
 
 #import cv2
 from skimage.io import imread, imshow, imsave
+from scipy.misc import imresize
 import os
 from random import randint
 import logging
@@ -78,13 +79,8 @@ class ImageArray(object):
     def width(self):
         return self.arr.shape[1]
 
-# NEEDS RE-WRITING USING skimage 
-##    def resize(self, set_height=0, set_width=0, scale_width=1, scale_height=1):
-##        # scale: (0,1], 1=same input size
-##        # defaults yield no changes
-##        self.arr = cv2.resize(self.arr,
-##                             dsize=(set_width, set_height),
-##                             fx=scale_width, fy=scale_height)
+    def resize(self, height, width):
+        self.arr = imresize(self.arr, (height, width))
 
     def crop(self, pixels_width=None, pixels_height=None, percent_width=None, percent_height=None): # ToDo: random_n=None (or number of random number of crops to make)
         """ Returns a crop image specified by pixel starting/ending positions or reduces
