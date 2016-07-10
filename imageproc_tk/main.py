@@ -21,15 +21,17 @@ GH = os.path.join(dir, "../tests/data/GH.jpg")
 
 class ImageArray(object):
 
-    def __init__(self, img_path=GH, arr=None, channels=3):
+    def __init__(self, img_path=GH, np_path=None,  arr=None, channels=3):
         self.channels = channels
         if img_path != None:
             self.path = img_path
             self.img2arr()
+        elif np_path != None:
+            self.arr = np.load(np_path)
         elif arr != None:
             self.arr = arr
         else:
-            raise InputError("Please initialise class with either argument 'img_path' or 'arr'.")
+            raise InputError("Please initialise class with either argument 'img_path', 'np_path' or 'arr'.")
 
 
     def __repr__(self):
@@ -66,6 +68,9 @@ class ImageArray(object):
 
     def save_img(self, filepath='/tmp/ImageArray.jpg'):
         imsave(filepath, self.arr)
+
+    def save_arr(self, filepath='/tmp/ImageArray'): # automatically adds '.npy' extension
+        np.save(filepath, self.arr)
 
     def height(self):
         return self.arr.shape[0]
