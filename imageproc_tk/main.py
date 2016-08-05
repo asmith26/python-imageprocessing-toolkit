@@ -64,7 +64,10 @@ class ImageArray(object):
     
 
     def show_img(self,  name='image'):
-        plt.imshow(self.arr, interpolation='nearest')
+        if self.channels == 1:
+            plt.imshow(self.arr, cmap='Greys_r')
+        elif self.channels == 3:
+            plt.imshow(self.arr)
         plt.show()
 
     def save_img(self, filepath='/tmp/ImageArray.jpg'):
